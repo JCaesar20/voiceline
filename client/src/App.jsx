@@ -8,10 +8,12 @@ function App() {
 
   const handleSearch = async () => {
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}?search=${query}`);
-      const data = await res.json();
-      setResults(data);
-      setSearchHistory([...searchHistory, query]);
+      if(query.length > 0) {
+        const res = await fetch(`${process.env.BACKEND_URL}?search=${query}`);
+        const data = await res.json();
+        setResults(data);
+        setSearchHistory([...searchHistory, query]);
+      }
     } catch(e) {
       setError(true);
     }
