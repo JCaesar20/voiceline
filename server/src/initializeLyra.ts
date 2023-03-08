@@ -2,23 +2,27 @@ import { create, insertBatch } from "@lyrasearch/lyra";
 import { ResponseType } from "./responseType";
 
 export const intializeLyra = async () => {
-  const response = await fetch("https://dummyjson.com/quotes");
-  const jsonResponse: ResponseType = await response.json();
+  try {
+    const response = await fetch("https://dummyjson.com/quotes");
+    const jsonResponse: ResponseType = await response.json();
 
-  const db = await create({
-    schema: {
-      quote: "string",
-      author: "string",
-    },
-  });
+    const db = await create({
+      schema: {
+        quote: "string",
+        author: "string",
+      },
+    });
 
-  const insertConfig = {
-    id: (doc) => {
-      return doc.id.toString();
-    },
-  };
+    const insertConfig = {
+      id: (doc) => {
+        return doc.id.toString();
+      },
+    };
 
-  await insertBatch(db, jsonResponse.quotes, insertConfig);
+    await insertBatch(db, jsonResponse.quotes, insertConfig);
 
-  return db;
+    return db;
+  } catch (e) {
+    return new Error("error");
+  }
 };
